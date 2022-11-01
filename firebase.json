@@ -1,0 +1,13 @@
+{
+  "hosting": {
+    "site": "character-generator-y76",
+    "public": "dist/gpt3-character-creator",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

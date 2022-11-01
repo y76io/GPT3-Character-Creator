@@ -1,0 +1,78 @@
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-scale-multiple"
+>
+  <p style="font-size: 20px; color: white">Loading...</p>
+</ngx-spinner>
+<div class="container">
+  <h1>Character Generator</h1>
+  <form style="display: contents" (submit)="generateCharName()">
+    <input placeholder="Brief" name="brief" [(ngModel)]="brief" />
+    <input
+      placeholder="Number of stories"
+      type="number"
+      name="numberOfStories"
+      [(ngModel)]="numberOfStories"
+    />
+    <select [(ngModel)]="gender" name="gender">
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+    </select>
+
+    <select [(ngModel)]="age" name="age">
+      <option value="Random">Random</option>
+
+      <option value="0-2">0-2</option>
+
+      <option value="3-9">3-9</option>
+
+      <option value="10-19">10-19</option>
+
+      <option value="20-29">20-29</option>
+
+      <option value="30-39">30-39</option>
+
+      <option value="40-49">40-49</option>
+
+      <option value="50-59">50-59</option>
+
+      <option value="60-69">60-69</option>
+
+      <option value="70+">70+</option>
+    </select>
+
+    <button type="submit" class="btn">Generate Backstory</button>
+  </form>
+  <h1 *ngIf="stories.length > 0">Please select a backstory</h1>
+  <input
+    *ngIf="name"
+    placeholder="Character name"
+    name="name"
+    [(ngModel)]="name"
+  />
+  <img *ngIf="image" src="{{ image }}" />
+
+  <div
+    class="story"
+    *ngFor="let story of stories; let i = index"
+    (click)="selectStory(i)"
+  >
+    <input [checked]="selectedStory === i" class="checkbox" type="checkbox" />
+    <div class="title">Backstory {{ i + 1 }}</div>
+    {{ story }}
+  </div>
+  <button
+    *ngIf="selectedStory || selectedStory === 0"
+    class="btn"
+    (click)="generateConversation()"
+  >
+    Generate Conversation
+  </button>
+  <div class="story" *ngIf="conversation.length > 0">
+    <p *ngFor="let c of conversation">
+      {{ c }}
+    </p>
+  </div>
+</div>
