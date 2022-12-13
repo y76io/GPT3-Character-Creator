@@ -8,7 +8,7 @@
 </ngx-spinner>
 <div class="container">
   <h1>Character Generator</h1>
-  <form style="display: contents" (submit)="generateCharName()">
+  <form style="display: contents" (submit)="generateChar()">
     <input placeholder="Brief" name="brief" [(ngModel)]="brief" />
     <input
       placeholder="Number of stories"
@@ -16,7 +16,7 @@
       name="numberOfStories"
       [(ngModel)]="numberOfStories"
     />
-    <select [(ngModel)]="gender" name="gender">
+    <!-- <select [(ngModel)]="gender" name="gender">
       <option value="Male">Male</option>
       <option value="Female">Female</option>
     </select>
@@ -41,9 +41,9 @@
       <option value="60-69">60-69</option>
 
       <option value="70+">70+</option>
-    </select>
+    </select> -->
 
-    <button type="submit" class="btn">Generate Backstory</button>
+    <button type="submit" class="btn">Generate Characters</button>
   </form>
   <h1 *ngIf="stories.length > 0">Please select a backstory</h1>
   <input
@@ -60,10 +60,17 @@
     (click)="selectStory(i)"
   >
     <input [checked]="selectedStory === i" class="checkbox" type="checkbox" />
-    <div class="title">Backstory {{ i + 1 }}</div>
+    <div class="title">Character {{ i + 1 }}</div>
     {{ story }}
+
+    <button class="btn" style="margin: 20px auto" (click)="generate20Images(i)">
+      Generate Character Images
+    </button>
+    <div *ngFor="let image of charactersImages">
+      <img *ngIf="image.character === i" src="{{ image.image }}" />
+    </div>
   </div>
-  <button
+  <!-- <button
     *ngIf="selectedStory || selectedStory === 0"
     class="btn"
     (click)="generateConversation()"
@@ -74,5 +81,5 @@
     <p *ngFor="let c of conversation">
       {{ c }}
     </p>
-  </div>
+  </div> -->
 </div>

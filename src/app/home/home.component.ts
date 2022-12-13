@@ -19,6 +19,9 @@ export class HomeComponent implements OnInit {
   gender = 'Male';
   characterInfo: any = {};
   age = '20-29';
+  charactersImages: any = [];
+  filterargs = { character: 0 };
+
   constructor(private spinner: NgxSpinnerService) {}
 
   selectStory(i: any) {
@@ -34,7 +37,7 @@ export class HomeComponent implements OnInit {
 
     var config = {
       method: 'get',
-      url: 'http://35.188.94.158:5000/subscription?data=' + data,
+      url: 'http://35.208.4.23:5000/subscription?data=' + data,
     };
 
     await axios(config)
@@ -80,7 +83,7 @@ export class HomeComponent implements OnInit {
         )
         .then(async (response) => {
           this.name = await response.data.response.comp;
-          await this.generateCharacterImage().then(async () => {
+          await this.generateCharacterImage(0).then(async () => {
             await this.generateChar().then(async () => {
               this.spinner.hide();
             });
@@ -130,7 +133,17 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async generateCharacterImage() {
+  generate20Images(index: any) {
+    var newArray = this.charactersImages.filter(function (el: any) {
+      return el.character != index;
+    });
+    this.charactersImages = newArray;
+    for (let i = 0; i < 20; i++) {
+      this.generateCharacterImage(index);
+    }
+  }
+
+  async generateCharacterImage(index: any) {
     this.spinner.show();
 
     const model = [
@@ -144,7 +157,11 @@ export class HomeComponent implements OnInit {
       'cartoon_style_6',
       'cartoon_style_7',
     ];
+
+    let gender_list = ['Male', 'Female'];
     let selected_model = model[Math.floor(Math.random() * model.length)];
+    let selected_gender =
+      gender_list[Math.floor(Math.random() * gender_list.length)];
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -154,17 +171,16 @@ export class HomeComponent implements OnInit {
         token,
         seed: Math.floor(Math.random() * 10000).toString(),
         model: selected_model,
-        gender: this.gender,
+        gender: selected_gender,
         race: 'Random',
-        age: this.age,
+        age: 'Random',
       };
       data = JSON.stringify(data);
-
       var config = {
         method: 'get',
-        url: 'http://35.188.94.158:5000/generate_image?data=' + data,
+        url: 'http://35.208.4.23:5000/generate_image?data=' + data,
       };
-
+      console.log(data);
       await axios(config)
         .then(async (response) => {
           if (
@@ -172,11 +188,17 @@ export class HomeComponent implements OnInit {
             response.status === 200 &&
             response.data.status_code === 200
           ) {
-            this.image =
-              'http://35.188.94.158:5000' +
-              (await response.data.body.generated_image);
+            this.charactersImages.push({
+              character: index,
+              image:
+                'http://35.208.4.23:5000' +
+                (await response.data.body.generated_image),
+            });
+
+            console.log(this.charactersImages);
+            this.spinner.hide();
           } else {
-            alert('Something went wrong !');
+            console.log('error');
           }
         })
         .catch(function (error) {
@@ -197,15 +219,9 @@ export class HomeComponent implements OnInit {
       this.spinner.show();
       this.stories = [];
       const prompt =
-        'Give me big backstory and the historical background of a ' +
-        this.gender +
-        ' character named ' +
-        this.name +
-        ', his age is ' +
-        this.age +
-        ' who is a ' +
+        'Give me big backstory and the historical background of a character who is a ' +
         this.brief +
-        ' Describe all the details of his story';
+        '. Describe all the details of his story';
 
       // const prompt =
       //   "generate a conversation with ahmad wehbe.Ahmad Wehbe was born in Baghdad, Iraq in 1978. His father was a soldier in the Iraqi Army and was killed in the Iran-Iraq War when Ahmad was just four years old. Ahmad's mother died of cancer when he was ten. He was raised by his aunt and uncle who were very strict with him. Ahmad joined the Iraqi Army when he was eighteen and served for six years before being deployed to Afghanistan as part of the International Security Assistance Force (ISAF). He served two tours in Afghanistan before being wounded in an IED explosion. Ahmad returned to Iraq after his recovery and is currently serving as a soldier in the Iraqi Army. ";
