@@ -45,7 +45,7 @@
 
     <button type="submit" class="btn">Generate Characters</button>
   </form>
-  <h1 *ngIf="stories.length > 0">Please select a backstory</h1>
+  <h1 *ngIf="stories.length > 0">Please select a character</h1>
   <input
     *ngIf="name"
     placeholder="Character name"
@@ -53,21 +53,70 @@
     [(ngModel)]="name"
   />
   <img *ngIf="image" src="{{ image }}" />
+  <div *ngFor="let story of stories; let i = index">
+    <div class="story" (click)="selectStory(i)">
+      <input [checked]="selectedStory === i" class="checkbox" type="checkbox" />
+      <div class="title">Character {{ i + 1 }}</div>
+      {{ story }}
 
-  <div
-    class="story"
-    *ngFor="let story of stories; let i = index"
-    (click)="selectStory(i)"
-  >
-    <input [checked]="selectedStory === i" class="checkbox" type="checkbox" />
-    <div class="title">Character {{ i + 1 }}</div>
-    {{ story }}
+      <button
+        class="btn"
+        style="margin: 20px auto"
+        (click)="generate20Images(i, true)"
+      >
+        Generate Character Images
+      </button>
+    </div>
+    <div
+      style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center"
+      *ngIf="charactersImages.length > 0"
+    >
+      <select
+        *ngIf="characters[i].gender"
+        [(ngModel)]="characters[i].gender"
+        name="gender"
+      >
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+      </select>
+      <select
+        *ngIf="characters[i].age"
+        [(ngModel)]="characters[i].age"
+        name="age"
+      >
+        <option value="Random">Random</option>
 
-    <button class="btn" style="margin: 20px auto" (click)="generate20Images(i)">
-      Generate Character Images
-    </button>
-    <div *ngFor="let image of charactersImages">
-      <img *ngIf="image.character === i" src="{{ image.image }}" />
+        <option value="0-2">0-2</option>
+
+        <option value="3-9">3-9</option>
+
+        <option value="10-19">10-19</option>
+
+        <option value="20-29">20-29</option>
+
+        <option value="30-39">30-39</option>
+
+        <option value="40-49">40-49</option>
+
+        <option value="50-59">50-59</option>
+
+        <option value="60-69">60-69</option>
+
+        <option value="70+">70+</option>
+      </select>
+      <button
+        class="btn"
+        style="margin: 20px auto"
+        *ngIf="characters[i].age && characters[i].gender"
+        (click)="generate20Images(i, false)"
+      >
+        Regenerate Character Images
+      </button>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <div *ngFor="let image of charactersImages">
+          <img *ngIf="image.character === i" src="{{ image.image }}" />
+        </div>
+      </div>
     </div>
   </div>
   <!-- <button
