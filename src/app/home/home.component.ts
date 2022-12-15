@@ -1,3 +1,4 @@
+import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -38,7 +39,7 @@ export class HomeComponent implements OnInit {
 
     var config = {
       method: 'get',
-      url: 'http://35.208.4.23:5000/subscription?data=' + data,
+      url: 'http://35.209.248.96:5000/subscription?data=' + data,
     };
 
     await axios(config)
@@ -137,6 +138,7 @@ export class HomeComponent implements OnInit {
   }
 
   async generate20Images(index: any, random = true) {
+    this.spinner.show();
     var newArray = this.charactersImages.filter(function (el: any) {
       return el.character != index;
     });
@@ -225,6 +227,7 @@ export class HomeComponent implements OnInit {
     for (let i = 0; i < 20; i++) {
       this.generateCharacterImage(index, random, gender, age);
     }
+    this.spinner.hide();
   }
 
   async generateCharacterImage(index: any, random: any, gender: any, age: any) {
@@ -242,11 +245,9 @@ export class HomeComponent implements OnInit {
       'cartoon_style_7',
     ];
 
-    let gender_list = ['Male', 'Female'];
     let selected_model = model[Math.floor(Math.random() * model.length)];
     // let selected_gender =
     //   gender_list[Math.floor(Math.random() * gender_list.length)];
-    let selected_gender = gender;
 
     const token = localStorage.getItem('token');
     if (!token) {
@@ -258,7 +259,7 @@ export class HomeComponent implements OnInit {
           token,
           seed: Math.floor(Math.random() * 10000).toString(),
           model: selected_model,
-          gender: selected_gender,
+          gender: gender,
           race: 'Random',
           age: age,
         };
@@ -267,16 +268,16 @@ export class HomeComponent implements OnInit {
           token,
           seed: Math.floor(Math.random() * 10000).toString(),
           model: selected_model,
-          gender: this.gender,
+          gender: this.characters[index].gender,
           race: 'Random',
-          age: this.age,
+          age: this.characters[index].age,
         };
       }
 
       data = JSON.stringify(data);
       var config = {
         method: 'get',
-        url: 'http://35.208.4.23:5000/generate_image?data=' + data,
+        url: 'http://35.209.248.96:5000/generate_image?data=' + data,
       };
       console.log(data);
       await axios(config)
@@ -289,7 +290,7 @@ export class HomeComponent implements OnInit {
             this.charactersImages.push({
               character: index,
               image:
-                'http://35.208.4.23:5000' +
+                'http://35.209.248.96:5000' +
                 (await response.data.body.generated_image),
               age: age,
               gender: gender,
@@ -305,6 +306,9 @@ export class HomeComponent implements OnInit {
           alert('Something went wrong !');
         });
     }
+  }
+  onItemChange($event: any): void {
+    console.log('Carousel onItemChange', $event);
   }
 
   filterByCharacter(index: any) {

@@ -67,10 +67,7 @@
         Generate Character Images
       </button>
     </div>
-    <div
-      style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center"
-      *ngIf="charactersImages.length > 0"
-    >
+    <div *ngIf="charactersImages.length > 0">
       <select
         *ngIf="characters[i].gender"
         [(ngModel)]="characters[i].gender"
@@ -113,12 +110,19 @@
         Regenerate Character Images
       </button>
       <div style="display: flex; flex-wrap: wrap; gap: 10px">
-        <div *ngFor="let image of charactersImages">
-          <img *ngIf="image.character === i" src="{{ image.image }}" />
-        </div>
+        <carousel [autoplay]="true" [loop]="true">
+          <div
+            class="carousel-cell"
+            style="width: 512px"
+            *ngFor="let image of charactersImages"
+          >
+            <img src="{{ image.image }}" />
+          </div>
+        </carousel>
       </div>
     </div>
   </div>
+
   <!-- <button
     *ngIf="selectedStory || selectedStory === 0"
     class="btn"

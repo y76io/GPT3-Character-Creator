@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { IvyCarouselModule } from 'angular-responsive-carousel';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +15,7 @@ import { HomeComponent } from './home/home.component';
     AppRoutingModule,
     FormsModule,
     NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }),
+    IvyCarouselModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
