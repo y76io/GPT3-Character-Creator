@@ -53,11 +53,15 @@
     [(ngModel)]="name"
   />
   <img *ngIf="image" src="{{ image }}" />
-  <div *ngFor="let story of stories; let i = index">
+  <div *ngFor="let story of stories; let i = index" style="width: 80%">
     <div class="story" (click)="selectStory(i)">
       <input [checked]="selectedStory === i" class="checkbox" type="checkbox" />
       <div class="title">Character {{ i + 1 }}</div>
-      {{ story }}
+      <textarea
+        style="height: 200px; width: 90%"
+        [value]="story"
+        (change)="changeStory($event, i)"
+      ></textarea>
 
       <button
         class="btn"

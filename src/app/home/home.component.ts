@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit {
 
     var config = {
       method: 'get',
-      url: 'http://35.209.127.68:5000/subscription?data=' + data,
+      url: 'http://35.208.4.23:5000/subscription?data=' + data,
     };
 
     await axios(config)
@@ -277,7 +277,7 @@ export class HomeComponent implements OnInit {
       data = JSON.stringify(data);
       var config = {
         method: 'get',
-        url: 'http://35.209.127.68:5000/generate_image?data=' + data,
+        url: 'http://35.208.4.23:5000/generate_image?data=' + data,
       };
       console.log(data);
       await axios(config)
@@ -290,7 +290,7 @@ export class HomeComponent implements OnInit {
             this.charactersImages.push({
               character: index,
               image:
-                'http://35.209.127.68:5000' +
+                'http://35.208.4.23:5000' +
                 (await response.data.body.generated_image),
               age: age,
               gender: gender,
@@ -307,6 +307,11 @@ export class HomeComponent implements OnInit {
         });
     }
   }
+
+  changeStory(event: any, i: any) {
+    this.stories[i] = event.target.value;
+  }
+
   onItemChange($event: any): void {
     console.log('Carousel onItemChange', $event);
   }
