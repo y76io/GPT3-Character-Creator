@@ -23,6 +23,8 @@ export class HomeComponent implements OnInit {
   charactersImages: any = [];
   filterargs = { character: 0 };
   characters: any = [];
+  race = ['White', 'Black', 'Indian', 'Asian'];
+  s_race = 'Random';
 
   constructor(private spinner: NgxSpinnerService) {}
 
@@ -85,13 +87,17 @@ export class HomeComponent implements OnInit {
         )
         .then(async (response) => {
           this.name = await response.data.response.comp;
-          await this.generateCharacterImage(0, true, this.stories[0], '').then(
-            async () => {
-              await this.generateChar().then(async () => {
-                this.spinner.hide();
-              });
-            }
-          );
+          await this.generateCharacterImage(
+            0,
+            true,
+            this.stories[0],
+            '',
+            ''
+          ).then(async () => {
+            await this.generateChar().then(async () => {
+              this.spinner.hide();
+            });
+          });
         })
         .catch(function (error) {
           console.log(error);
@@ -143,8 +149,10 @@ export class HomeComponent implements OnInit {
       return el.character != index;
     });
     this.charactersImages = newArray;
+
     let gender;
     let age;
+    let race;
     var prompt =
       'This character is a female soldier named Sarah Anderson. She was born and raised in London, England during the Victorian era. She was the eldest of four children born to a middle-class family. Sarah was expected to help support her family, so she took a job as a seamstress at the age of sixteen.\n' +
       'At the same time, Sarah had ambitions to become a soldier. She was inspired by the courage of the soldiers fighting in the Crimean War, and by the stories of the female soldiers who had served as nurses during the war. Sarah was determined to enlist.\n' +
@@ -221,16 +229,61 @@ export class HomeComponent implements OnInit {
         console.log(error);
         alert('Something went wrong !');
       });
-    this.characters[index].gender = gender;
-    this.characters[index].age = age;
 
+    prompt =
+      'This is the story of Isaiah, a soldier in the United States Army. Isaiah was born in 1930 in a small town in the southern United States. His parents, both African American, had moved there to escape the oppressive racial segregation laws in their home state of Mississippi. Isaiah was raised with a strong sense of justice and a desire to do what was right.\r\nIsaiah was a bright student, and he excelled in his studies. His teachers encouraged him to pursue a career in the military, which he did. He joined the Army in 1948 and quickly rose through the ranks. Isaiah was eventually assigned to the 82nd Airborne Division, where he served as a paratrooper.\r\nDuring the Korean War, Isaiah was deployed to the Korean Peninsula. He fought bravely and honorably, and he was eventually promoted to the rank of sergeant. He was respected by his fellow soldiers, and by the end of the war, he had earned two Bronze Stars for his valiant service.\r\nAfter the war, Isaiah continued to serve in the Army, eventually retiring with the rank of Colonel. He settled down and married a woman from his hometown, with whom he had two children. Isaiah remained passionate about his country and devoted much of his life to public service\r\nwhat is the race of this character?\r\nBlack\r\nwhat is the race of this character?\r\nBlack\r\nwhat is the race of this character?\r\nBlack\r\nThis is the story of Jin, a soldier in the United States Army. Jin was born in 1940 in a small town in the northern part of China. His parents, both Chinese, had moved there to escape the civil unrest in their home province. Jin was raised with a strong sense of patriotism and a desire to serve his country.\r\nJin was a bright student, and he excelled in his studies. His teachers encouraged him to pursue a career in the military, which he did. He joined the Army in 1957 and quickly rose through the ranks. Jin was eventually assigned to the 101st Airborne Division, where he served as a paratrooper.\r\nDuring the Vietnam War, Jin was deployed to the Southeast Asian country. He fought bravely and honorably, and he was eventually promoted to the rank of lieutenant. He was respected by his fellow soldiers, and by the end of the war, he had earned two Bronze Stars for his valiant service.\r\nAfter the war, Jin continued to serve in the Army, eventually retiring with the rank of Major. He settled down and married a woman from his hometown, with whom he had two children. Jin remained passionate about his country and devoted much of his life to public service.\r\nwhat is the race of this character?\r\nAsian\r\nThis is the story of Rajesh, a soldier in the Indian Army. Rajesh was born in 1945 in a small village in the western Indian state of Gujarat. His parents, both Indian, had moved there to escape the caste system in their home state. Rajesh was raised with a strong sense of justice and a desire to do what was right.\r\nRajesh was a bright student, and he excelled in his studies. His teachers encouraged him to pursue a career in the military, which he did. He joined the Army in 1963 and quickly rose through the ranks. Rajesh was eventually assigned to the Infantry Division, where he served as a sharpshooter.\r\nDuring the Bangladesh War of Liberation, Rajesh was deployed to the country. He fought bravely and honorably, and he was eventually promoted to the rank of captain. He was respected by his fellow soldiers, and by the end of the war, he had earned two medals of bravery for his valiant service.\r\nAfter the war, Rajesh continued to serve in the Army, eventually retiring with the rank of Major. He settled down and married a woman from his hometown, with whom he had two children. Rajesh remained passionate about his country and devoted much of his\r\nwhat is the race of this character?\r\nIndian' +
+      '\n' +
+      this.stories[index] +
+      '\n' +
+      'what is the race of this character?\n';
+    await axios
+      .post(
+        'https://us-central1-hookline-magic-f926f.cloudfunctions.net/openAiSandbox',
+        {
+          prompt: prompt,
+        }
+      )
+      .then(async (response) => {
+        race = await response.data.response.comp;
+        if (race.includes('Black') || race.includes('black')) {
+          race = 'Black';
+        } else if (race.includes('White') || race.includes('white')) {
+          race = 'White';
+        } else if (race.includes('Asian') || race.includes('asian')) {
+          race = 'Asian';
+        } else if (race.includes('Indian') || race.includes('indian')) {
+          race = 'Indian';
+        } else {
+          race = 'Random';
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        alert('Something went wrong !');
+      });
+    this.characters[index].gender = this.characters[index].gender
+      ? this.characters[index].gender
+      : gender;
+    this.characters[index].age = this.characters[index].age
+      ? this.characters[index].age
+      : age;
+    this.characters[index].race = this.characters[index].race
+      ? this.characters[index].race
+      : race;
+    alert(this.characters[index].race);
     for (let i = 0; i < 20; i++) {
-      this.generateCharacterImage(index, random, gender, age);
+      this.generateCharacterImage(index, random, gender, age, race);
     }
     this.spinner.hide();
   }
 
-  async generateCharacterImage(index: any, random: any, gender: any, age: any) {
+  async generateCharacterImage(
+    index: any,
+    random: any,
+    gender: any,
+    age: any,
+    race: any
+  ) {
     this.spinner.show();
 
     const model = [
@@ -260,7 +313,7 @@ export class HomeComponent implements OnInit {
           seed: Math.floor(Math.random() * 10000).toString(),
           model: selected_model,
           gender: gender,
-          race: 'Random',
+          race: race,
           age: age,
         };
       } else {
@@ -269,7 +322,7 @@ export class HomeComponent implements OnInit {
           seed: Math.floor(Math.random() * 10000).toString(),
           model: selected_model,
           gender: this.characters[index].gender,
-          race: 'Random',
+          race: this.characters[index].race,
           age: this.characters[index].age,
         };
       }
@@ -330,15 +383,20 @@ export class HomeComponent implements OnInit {
     } else {
       this.spinner.show();
       this.stories = [];
-      const prompt =
-        'create a random gender character with random age which is a ' +
-        this.brief +
-        '.give me big backstory and the historical background of this character and describe all the details of his story:';
 
       // const prompt =
       //   "generate a conversation with ahmad wehbe.Ahmad Wehbe was born in Baghdad, Iraq in 1978. His father was a soldier in the Iraqi Army and was killed in the Iran-Iraq War when Ahmad was just four years old. Ahmad's mother died of cancer when he was ten. He was raised by his aunt and uncle who were very strict with him. Ahmad joined the Iraqi Army when he was eighteen and served for six years before being deployed to Afghanistan as part of the International Security Assistance Force (ISAF). He served two tours in Afghanistan before being wounded in an IED explosion. Ahmad returned to Iraq after his recovery and is currently serving as a soldier in the Iraqi Army. ";
-
+      let prompt;
       for (var i = 0; i < this.numberOfStories; i++) {
+        let selected_race =
+          this.race[Math.floor(Math.random() * this.race.length)];
+
+        prompt =
+          'create a random gender ' +
+          selected_race +
+          ' race character with random age which is a ' +
+          this.brief +
+          '.give me big backstory and the historical background of this character and describe all the details of his story:';
         await axios
           .post(
             'https://us-central1-hookline-magic-f926f.cloudfunctions.net/openAiSandbox',
@@ -361,7 +419,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async getGender(backstory: any) {}
+  raceChange(event: any, index: any) {
+    this.characters[index].race = event.target.value;
+    alert(this.characters[index].race);
+    alert(event.target.value);
+  }
+
+  filterFunction(characters: any, i: any): any[] {
+    return characters.filter((character: any) => character.character === i);
+  }
 
   ngOnInit(): void {
     this.generateToken();

@@ -105,6 +105,22 @@
 
         <option value="70+">70+</option>
       </select>
+      <select
+        *ngIf="characters[i].race"
+        [(ngModel)]="characters[i].race"
+        name="race"
+        (change)="raceChange($event, i)"
+      >
+        <option value="Random">Random</option>
+
+        <option value="White">White</option>
+
+        <option value="Black">Black</option>
+
+        <option value="Indian">Indian</option>
+
+        <option value="Asian">Asian</option>
+      </select>
       <button
         class="btn"
         style="margin: 20px auto"
@@ -118,9 +134,9 @@
           <div
             class="carousel-cell"
             style="width: 512px"
-            *ngFor="let image of charactersImages"
+            *ngFor="let image of filterFunction(charactersImages, i)"
           >
-            <img src="{{ image.image }}" />
+            <img *ngIf="image.image" src="{{ image.image }}" />
           </div>
         </carousel>
       </div>
