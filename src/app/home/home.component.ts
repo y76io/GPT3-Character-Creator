@@ -270,7 +270,6 @@ export class HomeComponent implements OnInit {
     this.characters[index].race = this.characters[index].race
       ? this.characters[index].race
       : race;
-    alert(this.characters[index].race);
     for (let i = 0; i < 20; i++) {
       this.generateCharacterImage(index, random, gender, age, race);
     }
@@ -417,12 +416,6 @@ export class HomeComponent implements OnInit {
       this.selectedStory = 0;
       this.spinner.hide();
     }
-  }
-
-  raceChange(event: any, index: any) {
-    this.characters[index].race = event.target.value;
-    alert(this.characters[index].race);
-    alert(event.target.value);
   }
 
   filterFunction(characters: any, i: any): any[] {
