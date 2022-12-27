@@ -333,13 +333,17 @@ export class HomeComponent implements OnInit {
           age: age,
         };
       } else {
+        let genderVal: any = $('.genderSelector:eq(' + index + ')').val();
+        let ageVal: any = $('.ageSelector:eq(' + index + ')').val();
+        let raceVal: any = $('.raceSelector:eq(' + index + ')').val();
+
         data = {
           token,
           seed: Math.floor(Math.random() * 10000).toString(),
           model: selected_model,
-          gender: this.characters[index].gender,
-          race: this.characters[index].race,
-          age: this.characters[index].age,
+          gender: genderVal,
+          race: raceVal,
+          age: ageVal,
         };
       }
 
