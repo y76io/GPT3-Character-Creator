@@ -146,6 +146,7 @@ export class HomeComponent implements OnInit {
   }
 
   async generate20Images(index: any, random = true) {
+    this.loading = true;
     let stry: any = $('.storySelector')[index];
     let stry_text = $(stry).val();
 
@@ -185,7 +186,9 @@ export class HomeComponent implements OnInit {
         } else {
           gender = 'Male';
         }
-        $(genderVal).val(gender).change();
+        if (random) {
+          $(genderVal).val(gender).change();
+        }
       })
       .catch(function (error) {
         console.log(error);
@@ -231,7 +234,9 @@ export class HomeComponent implements OnInit {
           } else {
             age = 'Random';
           }
-          $(ageVal).val(age).change();
+          if (random) {
+            $(ageVal).val(age).change();
+          }
         } catch (error) {
           age = 'Random';
         }
@@ -269,7 +274,9 @@ export class HomeComponent implements OnInit {
         } else {
           race = 'Random';
         }
-        $(raceVal).val(race).change();
+        if (random) {
+          $(raceVal).val(race).change();
+        }
       })
       .catch(function (error) {
         console.log(error);
