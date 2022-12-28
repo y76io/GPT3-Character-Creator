@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import axios from 'axios';
 import * as $ from 'jquery';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { window } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -10,6 +11,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
+  [x: string]: any;
   name: string = '';
   brief: string = '';
   stories: any = [];
@@ -464,5 +466,14 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.generateToken();
+    var $window: any;
+
+    $(document).on('click', '.carousel-arrow-next', (e) => {
+      let index =
+        e.currentTarget.offsetParent.attributes['ng-reflect-id'].value;
+
+      index = Number(index);
+      this.generateCharacterImage(index, false, '', '', '');
+    });
   }
 }
