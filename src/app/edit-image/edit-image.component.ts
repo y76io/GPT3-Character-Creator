@@ -10,6 +10,7 @@ export class EditImageComponent implements OnInit {
   prompt: any = '';
   happy: any = '';
   source = '../../assets/My project-1.jpg';
+  loading = false;
 
   constructor() {}
 
@@ -17,8 +18,10 @@ export class EditImageComponent implements OnInit {
     this.source = '../../assets/My project-1.jpg';
   }
   async editImage() {
+    this.loading = true;
     if (!prompt) {
       alert('Please enter a prompt!');
+      this.loading = false;
     } else {
       let complete_prompt;
       complete_prompt =
@@ -51,6 +54,7 @@ export class EditImageComponent implements OnInit {
                 let happy = await response.data.response.comp;
                 if (happy.includes('yes') || happy.includes('Yes')) {
                   this.source = '../../assets/My project-3.jpg';
+                  this.loading = false;
                 } else {
                   complete_prompt =
                     'surprized face.\r\nIs this face surprised?\r\nYes\r\nsurprized face.\r\nIs this face surprised?\r\nYes\r\nhappy face.\r\nIs this face surprised?\r\nNo' +
@@ -65,19 +69,23 @@ export class EditImageComponent implements OnInit {
                     )
                     .then(async (response) => {
                       let suprised = await response.data.response.comp;
+                      this.loading = false;
                       if (
                         suprised.includes('yes') ||
                         suprised.includes('Yes')
                       ) {
                         this.source = '../../assets/My project-4.jpg';
+                        this.loading = false;
                       } else {
                         this.source = '../../assets/My project-2.jpg';
+                        this.loading = false;
                       }
                     });
                 }
               });
           } else {
             this.source = '../../assets/My project-1.jpg';
+            this.loading = false;
           }
         });
     }
