@@ -1,5 +1,6 @@
 import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import axios from 'axios';
 import * as $ from 'jquery';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -30,7 +31,7 @@ export class HomeComponent implements OnInit {
   s_race = 'Random';
   loading = false;
 
-  constructor(private spinner: NgxSpinnerService) {}
+  constructor(private spinner: NgxSpinnerService, private router: Router) {}
 
   selectStory(i: any) {
     this.selectedStory = i;
@@ -355,7 +356,7 @@ export class HomeComponent implements OnInit {
           age: ageVal,
         };
       }
-
+      let data1 = data;
       data = JSON.stringify(data);
       var config = {
         method: 'get',
@@ -374,9 +375,15 @@ export class HomeComponent implements OnInit {
               image:
                 'http://35.208.4.23:5000' +
                 (await response.data.body.generated_image),
-              age: age,
-              gender: gender,
+              age: data1.age,
+              gender: data1.gender,
+              race: data1.race,
+              model: data1.model,
+              seed: data1.seed,
             });
+
+            console.log(data1.gender);
+            console.log(data1.age);
 
             // this.spinner.hide();
           } else {
@@ -388,6 +395,10 @@ export class HomeComponent implements OnInit {
           alert('Something went wrong !');
         });
     }
+  }
+
+  openEditPage(gender: any, age: any, race: any, seed: any, model: any) {
+    this.router.navigate(['/edit']);
   }
 
   changeStory(event: any, i: any) {

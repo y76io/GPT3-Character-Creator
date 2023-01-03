@@ -7,12 +7,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { EditImageComponent } from './edit-image/edit-image.component';
 interface NgxSpinnerConfig {
   type?: string;
 }
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, EditImageComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

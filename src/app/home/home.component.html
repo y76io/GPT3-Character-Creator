@@ -6,6 +6,7 @@
 >
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
+
 <div class="container">
   <h1>Character Generator</h1>
   <form style="display: contents" (submit)="generateChar()">
@@ -115,7 +116,6 @@
       <button
         class="btn"
         style="margin: 20px auto"
-        *ngIf="characters[i].age && characters[i].gender"
         (click)="generate20Images(i, false)"
       >
         Regenerate Character Images
@@ -209,16 +209,38 @@
           [loop]="true"
           *ngIf="charactersImages.length > 0"
           [id]="i"
+          [cellWidth]="400"
+          [height]="400"
         >
           <div
             class="carousel-cell"
-            style="width: 512px"
-            *ngFor="let image of filterFunction(charactersImages, i)"
+            *ngFor="
+              let image of filterFunction(charactersImages, i);
+              let k = index
+            "
+            style="height: 400px"
           >
             <img
               (load)="imageLoad()"
               *ngIf="image.image"
-              src="{{ image.image }}"
+              [src]="
+                k == 2 && image.age === '3-9' && image.gender === 'Female'
+                  ? '../../assets/My project-1.jpg'
+                  : image.image
+              "
+              (click)="
+                k == 2 &&
+                  image.age === '3-9' &&
+                  image.gender === 'Female' &&
+                  openEditPage(
+                    image.gender,
+                    image.age,
+                    image.race,
+                    image.seed,
+                    image.model
+                  )
+              "
+              style="object-fit: cover"
             />
           </div>
         </carousel>

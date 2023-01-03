@@ -1,0 +1,18 @@
+<div style="background-color: #cdcaca; padding: 40px 0px">
+  <div class="all-container">
+    <div class="left">
+      <div class="image"><img src="../../assets/My project-1.jpg" /></div>
+      <div class="options">
+        <div class="label">Target:</div>
+        <div><textarea [(ngModel)]="prompt"></textarea></div>
+      </div>
+      <div class="buttons">
+        <button (click)="reset()">Reset</button>
+        <button (click)="editImage()">Accept</button>
+      </div>
+    </div>
+    <div class="right">
+      <div class="image"><img src="{{ source }}" /></div>
+    </div>
+  </div>
+</div>
